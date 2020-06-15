@@ -28,7 +28,9 @@ namespace HealthCheck
             });
 
             services.AddHealthChecks()
-                .AddCheck<ICMPHealthCheck>("ICMP");
+                .AddCheck("ICMP_01", new ICMPHealthCheck("www.ryadel.com", 100))
+                .AddCheck("ICMP_02", new ICMPHealthCheck("www.google.com", 100))
+                .AddCheck("ICMP_03", new ICMPHealthCheck("www.does-not-exist.com", 100));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,7 +65,7 @@ namespace HealthCheck
 
             app.UseRouting();
 
-            app.UseHealthChecks("/hc");
+            app.UseHealthChecks("/hc", new CustomHealthCheckOptions());
 
             app.UseEndpoints(endpoints =>
             {
